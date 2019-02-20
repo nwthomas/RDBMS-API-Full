@@ -38,7 +38,7 @@ server.get("/api/cohorts", async (req, res) => {
 server.get("/api/cohorts/:id", async (req, res) => {
   try {
     const cohort = await db("cohorts").where({ id: req.params.id });
-    if (cohort) {
+    if (cohort.length) {
       res.status(200).json(cohort[0]); // Removed from array to return object
     } else {
       res
@@ -56,7 +56,7 @@ server.get("/api/cohorts/:id", async (req, res) => {
 server.get("/api/cohorts/:id/students", async (req, res) => {
   try {
     const students = await db("students").where({ cohort_id: req.params.id });
-    if (students.length > 0) {
+    if (students.length) {
       res.status(200).json(students);
     } else {
       res.status(404).json({
@@ -82,6 +82,30 @@ server.post("/api/cohorts", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error adding the cohort to the database."
+    });
+  }
+});
+
+// Update an existing cohort
+server.put("/api/cohorts/:id", async (req, res) => {
+  const { name } = req.body;
+  try {
+    const cohort = await db("cohorts")
+      .where({ id: req.params.id })
+      .update({ name });
+    if (cohort) {
+      res.status(200).json({
+        message: "Cohort updated successfully in the database.",
+        numUpdateded: cohort
+      });
+    } else {
+      res
+        .status(404)
+        .json({ message: "Could not find that cohort in the database." });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "Error updating the cohort in the database."
     });
   }
 });
