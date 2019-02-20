@@ -15,6 +15,7 @@ server.get("/", (req, res) => {
   res.send("Working!");
 });
 
+// ======================================================== Cohorts
 // Get all cohorts
 server.get("/api/cohorts", async (req, res) => {
   try {
@@ -130,6 +131,44 @@ server.delete("/api/cohorts/:id", async (req, res) => {
     res
       .status(500)
       .json({ message: "Error deleting the cohort from the database." });
+  }
+});
+
+// ======================================================== Students
+// Get all students records
+server.get("/api/students", async (req, res) => {
+  try {
+    const students = await db("students");
+    if (students.length) {
+      res.status(200).json(students);
+    } else {
+      res
+        .status(404)
+        .json({ message: "Could not find students' data in the database." });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "There was an error retrieving the students' data.",
+      error
+    });
+  }
+});
+
+// Get student by id
+server.get("/api/students/:id", async (req, res) => {
+  try {
+    const student = await db("students").where({ id: req.params.id });
+    if (student.length) {
+      res.status(200).json(student[0]); // Removed from array to return object
+    } else {
+      res
+        .status(404)
+        .json({ message: "Could not find the student in the database." });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving the student from the database." });
   }
 });
 
