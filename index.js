@@ -110,6 +110,29 @@ server.put("/api/cohorts/:id", async (req, res) => {
   }
 });
 
+server.delete("/api/cohorts/:id", async (req, res) => {
+  try {
+    const cohort = await db("cohorts")
+      .where({ id: req.params.id })
+      .del();
+    if (cohort) {
+      res.status(200).json({
+        message: "Cohort deleted successfully from the database.",
+        numCohortDeleted: cohort
+      });
+    } else {
+      res.status(404).json({
+        message: "Cohort does not exist in the database.",
+        numCohortDeleted: cohort
+      });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error deleting the cohort from the database." });
+  }
+});
+
 // Server
 const port = process.env.PORT || 8000;
 server.listen(port, () => {
