@@ -97,7 +97,7 @@ server.put("/api/cohorts/:id", async (req, res) => {
     if (cohort) {
       res.status(200).json({
         message: "Cohort updated successfully in the database.",
-        numUpdateded: cohort
+        numUpdated: cohort
       });
     } else {
       res
@@ -120,7 +120,7 @@ server.delete("/api/cohorts/:id", async (req, res) => {
     if (cohort) {
       res.status(200).json({
         message: "Cohort deleted successfully from the database.",
-        numCohortDeleted: cohort
+        numDeleted: cohort
       });
     } else {
       res.status(404).json({
@@ -207,7 +207,7 @@ server.put("/api/students/:id", async (req, res) => {
     if (student) {
       res.status(200).json({
         message: "Student updated successfully in the database.",
-        numUpdateded: student
+        numUpdated: student
       });
     } else {
       res
@@ -222,26 +222,26 @@ server.put("/api/students/:id", async (req, res) => {
 });
 
 // Deletes cohort in the database
-server.delete("/api/cohorts/:id", async (req, res) => {
+server.delete("/api/students/:id", async (req, res) => {
   try {
-    const cohort = await db("cohorts")
+    const student = await db("students")
       .where({ id: req.params.id })
       .del();
-    if (cohort) {
+    if (student) {
       res.status(200).json({
-        message: "Cohort deleted successfully from the database.",
-        numCohortDeleted: cohort
+        message: "Student deleted successfully from the database.",
+        numDeleted: student
       });
     } else {
       res.status(404).json({
-        message: "Cohort does not exist in the database.",
-        numCohortDeleted: cohort
+        message: "Student does not exist in the database.",
+        numCohortDeleted: student
       });
     }
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error deleting the cohort from the database." });
+      .json({ message: "Error deleting the student from the database." });
   }
 });
 

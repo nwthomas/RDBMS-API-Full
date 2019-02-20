@@ -15,6 +15,7 @@ exports.seed = function(knex, Promise) {
         { name: "Web 8" },
         { name: "Web 9" },
         { name: "Web 10" },
+        { name: "Web 11" },
         { name: "Web 12" },
         { name: "Web 13" },
         { name: "Web 14" },
