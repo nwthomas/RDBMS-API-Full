@@ -172,6 +172,26 @@ server.get("/api/students/:id", async (req, res) => {
   }
 });
 
+// Post a new student
+server.post("/api/students", async (req, res) => {
+  if (!req.body.name || !req.body.cohort_id) {
+    res
+      .status(400)
+      .json(
+        "Please include a name and/or cohort ID for the student and try again."
+      );
+  }
+  try {
+    const { name, cohort_id } = req.body;
+    const student = await db("students").insert({ name, cohort_id });
+    res.status(201).json(student);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error adding the student to the database."
+    });
+  }
+});
+
 // Server
 const port = process.env.PORT || 8000;
 server.listen(port, () => {
