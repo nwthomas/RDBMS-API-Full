@@ -158,7 +158,10 @@ server.get("/api/students", async (req, res) => {
 // Get student by id
 server.get("/api/students/:id", async (req, res) => {
   try {
-    const student = await db("students").where({ id: req.params.id });
+    const student = await db("students")
+      .join("cohorts", "students.cohort_id", "cohorts.id")
+      .select("students.name", "students.id", "cohorts.name as cohort")
+      .where("students.id", req.params.id);
     if (student.length) {
       res.status(200).json(student[0]); // Removed from array to return object
     } else {
@@ -221,7 +224,7 @@ server.put("/api/students/:id", async (req, res) => {
   }
 });
 
-// Deletes cohort in the database
+// Deletes student in the database
 server.delete("/api/students/:id", async (req, res) => {
   try {
     const student = await db("students")
